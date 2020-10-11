@@ -54,9 +54,8 @@ class HttpServer():
 
         Then you would return "/images/sample_1.png"
         """
-
-        return "TODO: COMPLETE THIS"  # TODO
-
+        request_split = request.split(' ')
+        return request_split[1]
 
     @staticmethod
     def get_mimetype(path):
@@ -87,8 +86,18 @@ class HttpServer():
 
         if path.endswith('/'):
             return b"text/plain"
-        else:
-            return b"TODO: FINISH THE REST OF THESE CASES"  # TODO
+        if path.endswith('.txt'):
+            return b"text/plain"
+        if path.endswith('.html'):
+            return b"text/html"
+        if path.endswith('.png'):
+            return b"image/png"
+        if path.endswith('.jpg'):
+            return b"image/jpeg"
+        if path.endswith('.py'):
+            return b"text/x-python"
+        if path.endswith('ico'):
+            return b'image/x-icon'
 
     @staticmethod
     def get_content(path):
@@ -119,12 +128,32 @@ class HttpServer():
             get_content('/') -> images/, a_web_page.html, make_type.py,..."
             # Returns a directory listing of `webroot/`
 
-            get_content('/a_page_that_doesnt_exist.html') 
+            get_content('/a_page_that_doesnt_exist.html')
             # The file `webroot/a_page_that_doesnt_exist.html`) doesn't exist,
             # so this should raise a FileNotFoundError.
         """
 
-        return b"Not implemented!"  # TODO: Complete this function.
+        cwd = os.getcwd()
+
+        path_to_search = cwd + '/webroot' + path
+
+        if path == '/':
+            content = os.listdir(cwd + '/webroot')
+            content = "\n".join(content)
+            return content.encode('utf8')
+
+        if os.path.isfile(path_to_search):
+            content = open(path_to_search, 'rb')
+            content = content.read()
+            return content
+
+        if os.path.isdir(path_to_search):
+            content = os.listdir(path_to_search)
+            content = "\n".join(content)
+            return content.encode('utf8')
+
+        else:
+            raise FileNotFoundError
 
     def __init__(self, port):
         self.port = port
@@ -155,11 +184,11 @@ class HttpServer():
 
                         if '\r\n\r\n' in request:
                             break
-                    
+
                     print("Request received:\n{}\n\n".format(request))
 
                     path = self.get_path(request)
-                    
+
                     try:
                         body = self.get_content(path)
                         mimetype = self.get_mimetype(path)
@@ -180,7 +209,7 @@ class HttpServer():
                 except:
                     traceback.print_exc()
                 finally:
-                    conn.close() 
+                    conn.close()
 
         except KeyboardInterrupt:
             sock.close()
@@ -193,8 +222,7 @@ if __name__ == '__main__':
     try:
         port = int(sys.argv[1])
     except IndexError:
-        port = 10000 
+        port = 10000
 
     server = HttpServer(port)
     server.serve()
-

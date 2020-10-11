@@ -68,7 +68,8 @@ class WebTestCase(unittest.TestCase):
         response = self.get_response(web_path)
 
         self.assertEqual(response.getcode(), 200, error_comment)
-        self.assertEqual(response.getheader('Content-Type'), 'text/plain', error_comment)
+        self.assertEqual(response.getheader('Content-Type'), 'text/plain',
+                         error_comment)
 
     def test_get_sample_scene_balls_jpeg(self):
         """
@@ -99,7 +100,8 @@ class WebTestCase(unittest.TestCase):
         response = self.get_response(web_path)
 
         self.assertEqual(response.getcode(), 200, error_comment)
-        self.assertEqual(response.getheader('Content-Type'), 'image/jpeg', error_comment)
+        self.assertEqual(response.getheader('Content-Type'), 'image/jpeg',
+                         error_comment)
 
     def test_get_sample_1_png(self):
         """
@@ -130,11 +132,13 @@ class WebTestCase(unittest.TestCase):
         response = self.get_response(web_path)
 
         self.assertEqual(response.getcode(), 200, error_comment)
-        self.assertEqual(response.getheader('Content-Type'), 'image/png', error_comment)
+        self.assertEqual(response.getheader('Content-Type'), 'image/png',
+                         error_comment)
 
     def test_get_404(self):
         """
-        A call to /asdf.txt (a file which does not exist in webroot) yields a 404 error
+        A call to /asdf.txt (a file which does not exist in webroot) yields a
+        404 error
         """
         file = 'asdf.txt'
 
@@ -179,7 +183,7 @@ class WebTestCase(unittest.TestCase):
 
     def test_ok_response_at_root_index(self):
         """
-        A call to / at least yields a 200 OK response 
+        A call to / at least yields a 200 OK response
         """
 
         directory = ''
